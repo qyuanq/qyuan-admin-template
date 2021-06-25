@@ -1,0 +1,11 @@
+[33mf8d04be[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull --rebase origin master (start): checkout f8d04be0358bc69a8d9702a78e65863fea7d8ae4
+[33mcffea11[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{1}: commit: update router
+[33m979cb0e[m HEAD@{2}: commit: update big File
+[33m8dc04e5[m HEAD@{3}: commit: update excel of big
+[33m909a0eb[m HEAD@{4}: commit (merge): update ...
+[33m3a25451[m HEAD@{5}: commit: update
+[33m2266eb2[m HEAD@{6}: commit: update table
+[33m5c1f0ff[m HEAD@{7}: commit: update views
+[33m08cec42[m HEAD@{8}: commit: update home component
+[33m53c9ad8[m HEAD@{9}: commit: change routes and Sidebar
+[33m714ded1[m HEAD@{10}: clone: from https://github.com/qyuanq/vue-admin-template.git
