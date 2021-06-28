@@ -22,3 +22,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function qiniuToken() {
+  return request({
+    url: '/api/qiniuToken',
+    method: 'get'
+  })
+}

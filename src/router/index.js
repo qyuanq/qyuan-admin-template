@@ -106,12 +106,18 @@ export const constantRoutes = [
   //       component: () => import('@/views/shop/trade-stat'),
   //       meta: { title: '交易统计', icon: 'form' }
   //     },
-  //     {
-  //       path: 'upload-big',
-  //       name: 'UploadBigFile',
-  //       component: () => import('@/views/shop/upload-big-file'),
-  //       meta: { title: '上传大文件', icon: 'form' }
-  //     }
+  // {
+  //   path: 'upload-big',
+  //   name: 'UploadBigFile',
+  //   component: () => import('@/views/shop/upload-big-file'),
+  //   meta: { title: '上传大文件', icon: 'form' }
+  // },
+  // {
+  //   path: 'upload-qiniu',
+  //   name: 'UploadQiniu',
+  //   component: () => import('@/views/shop/upload-qiniu'),
+  //   meta: { title: '上传七牛云', icon: 'form' }
+  // },
   //   ]
   // },
 

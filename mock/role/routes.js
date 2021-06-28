@@ -80,6 +80,12 @@ const constantRoutes = [
         name: 'UploadBigFile',
         component: 'views/shop/upload-big-file',
         meta: { title: '上传大文件', icon: 'form' }
+      },
+      {
+        path: 'upload-qiniu',
+        name: 'UploadQiniu',
+        component: '/views/shop/upload-qiniu',
+        meta: { title: '上传七牛云', icon: 'form' }
       }
     ]
   },
