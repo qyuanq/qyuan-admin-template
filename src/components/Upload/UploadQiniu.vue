@@ -4,7 +4,6 @@
       class="upload"
       drag
       :action="uploadURL"
-
       :http-request="uploaded"
       multiple
       :limit="3"
@@ -20,6 +19,7 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       <div slot="tip" class="el-upload__tip">只能上传mp4文件</div>
     </el-upload>
+    <el-progress v-show="progress > 0" :percentage="progress" class="progress" />
   </div>
 </template>
 
@@ -33,15 +33,17 @@ export default {
   data() {
     return {
       fileList: [], // 上传的文件列表
+      progress: 0, // 自定义上传行为的进度条
       uploadURL: 'https://upload-z1.qiniup.com', // 上传地址
       qnToken: '', // 七牛token
-      dataQiniu: {
+      dataQiniu: { // 七牛data
         file: null,
         key: '',
         token: this.qnToken,
         putExtra: null,
         config: null
-      }
+      },
+      domain: 'http://qvdzzxgtx.hb-bkt.clouddn.com/' // 外部访问域名
     }
   },
 
@@ -58,30 +60,9 @@ export default {
       if (ret.code === 20000 || ret.code === 0) {
         this.qnToken = ret.data
       }
-      // console.log(this.qnToken)
-      // const hash = await calculateFileHash(file)
-      // const key = hash + '_' + file.name
-      // console.log(file)
-      // const putExtra = {
-      //   fname: key,
-      //   mimeType: 'video/mp4'
-      // }
-      // const config = {
-      //   useCdnDomain: true,
-      //   region: 'qiniu.region.z1'
-      // }
-      // this.dataQiniu = {
-      //   key,
-      //   token: this.qnToken,
-      //   putExtra,
-      //   config
-      // }
-    },
-
-    async uploaded(context) {
-      const file = context.file
+      console.log(this.qnToken)
       const hash = await calculateFileHash(file)
-      const key = hash + file.name.split('.').pop()
+      const key = hash + '.' + file.name.split('.').pop()
       console.log(file)
       const putExtra = {
         fname: key,
@@ -91,15 +72,41 @@ export default {
         useCdnDomain: true,
         region: 'qiniu.region.z1'
       }
+      this.dataQiniu = {
+        key,
+        token: this.qnToken,
+        putExtra,
+        config
+      }
+    },
+
+    async uploaded(context) {
+      const file = context.file
+      const hash = await calculateFileHash(file)
+      const key = hash + '.' + file.name.split('.').pop()
+      console.log(file)
+      const putExtra = {
+        fname: key,
+        mimeType: 'video/mp4'
+      }
+      const config = {
+        useCdnDomain: true
+        // region: 'qiniu.region.z1'
+      }
       const observer = {
-        next(res) {
-          // console.log(res)
+        next: (res) => {
+          // 上传进度信息
+          this.progress = Math.floor(res.total.percent)
+          console.log(res.total.percent)
         },
-        error(err) {
+        error: (err) => {
           console.log(err)
         },
-        complete(res) {
-          console.log(res)
+        complete: (res) => {
+          // 返回的地址传给后端
+          this.progress = 0
+          const path = this.domain + res.key
+          console.log(path)
         }
       }
       const observable = qiniu.upload(file, key, this.qnToken, putExtra, config)
@@ -107,12 +114,13 @@ export default {
     },
 
     // 上传进度
-    progressUpload() {
-
+    progressUpload(event) {
+      console.log(event)
     },
     // 上传成功
     success(response, file) {
-      console.log(response, file)
+      const path = this.domain + response.key
+      console.log(path)
     },
     // 上传失败
     error() {

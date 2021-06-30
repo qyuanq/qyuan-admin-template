@@ -19,6 +19,7 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       <div slot="tip" class="el-upload__tip">只能上传mp4文件</div>
     </el-upload>
+    <el-progress :percentage="uploadProgress" class="progress" />
   </div>
 </template>
 
@@ -35,11 +36,24 @@ export default {
       chunks: [],
       hash: null,
       ext: '',
-      hashProgress: 0
+      hashProgress: 0,
+      file: null // 文件信息
     }
   },
 
-  computed: {},
+  computed: {
+    uploadProgress() {
+      if (this.chunks.length <= 0) {
+        return 0
+      }
+      const loaded = this.chunks.map(item => item.chunk.size * item.progress)
+        .reduce((total, curr) => {
+          return total + curr
+        }, 0)
+      console.log('进度条', Number((loaded / this.file.size).toFixed(2)))
+      return Number((loaded / this.file.size).toFixed(2))
+    }
+  },
 
   methods: {
     // 超出限定个数
@@ -49,14 +63,27 @@ export default {
     // 上传前校验
     async beforeUpload(file) {
       console.log('校验格式', file)
+      this.file = file
       // 切片
-      this.chunks = createFileChunk(file)
-      console.log(this.chunks)
+      const chunks = createFileChunk(file)
       // 计算hash
       // const hash = await calculateHashWork(this.chunks)
       // const hash = await calculateHashSample(file)
-      const hash = await calculateHashIdle(this.chunks)
+      const hash = await calculateHashIdle(chunks)
       this.hash = hash
+
+      this.chunks = chunks.map((chunk, index) => {
+        // 切片的名字 hash+index
+        const name = this.hash + '-' + index
+        return {
+          hash: this.hash,
+          name,
+          index,
+          chunk: chunk.file,
+          // 设置进度条，初始值0
+          progress: 0
+        }
+      })
       //   this.hash = res[0]
       //   this.hashProgress = res[1]
       console.log(hash)
@@ -64,8 +91,8 @@ export default {
       this.ext = file.name.split('.').pop()
     },
     // 文件上传时进度
-    progressUpload() {
-
+    progressUpload(event) {
+      console.log(event)
     },
     // 上传成功
     success() {
@@ -95,18 +122,9 @@ export default {
         })
         return
       }
-      this.chunks = this.chunks.map((chunk, index) => {
-        // 切片的名字 hash+index
-        const name = this.hash + '-' + index
-        return {
-          hash: this.hash,
-          name,
-          index,
-          chunk: chunk.file,
-          // 设置进度条，已经上传的，设为100
-          progress: uploadedList.includes(name) ? 100 : 0
-        }
-      })
+      // 设置进度条已经上传的，设为100，没上传的0
+      this.chunks.map(item => this.$set(item, 'progress', uploadedList.includes(item.name) ? 100 : 0))
+      console.log(this.chunks)
       await this.uploadChunks(uploadedList)
     },
 
@@ -167,13 +185,13 @@ export default {
           if (task) {
             const { form, index, error } = task
             try {
-              // await updateFile(form, {
-              //   onUploadProgress: (progress) => {
-              //     // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
-              //     this.chunks[index].progress = Number(((progress.loaded / progress.total) * 100).toFixed(2))
-              //   }
-              // })
-              updateFile(form)
+              await updateFile(form,
+                (progress) => {
+                  // 不是整体的进度条了，而是每个区块有自己的进度条，整体的进度条需要计算
+                  this.chunks[index].progress = Number(((progress.loaded / progress.total) * 100).toFixed(2))
+                }
+              )
+              // updateFile(form)
               if (count === len - 1) {
                 // 最后一个任务
                 resolve()

@@ -28,11 +28,12 @@ export function checkfile(data) {
   })
 }
 
-export function updateFile(data) {
+export function updateFile(data, onUploadProgress) {
   return request({
     url: '/api/updateFile',
     method: 'post',
-    data
+    data,
+    onUploadProgress
   })
 }
 
@@ -44,10 +45,11 @@ export function mergeFile(data) {
   })
 }
 
-export function aaa(data) {
+// 下载后端返回文件流
+export function download() {
   return request({
-    url: '/api/aaa',
+    url: '/api/download',
     method: 'post',
-    data
+    responseType: 'blob'
   })
 }

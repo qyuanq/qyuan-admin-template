@@ -249,7 +249,7 @@ export default {
 
     // 下载
     downloadTemp() {
-      window.location.href = 'http://127.0.0.1:7001/public/crm.xlsx'
+      window.location.href = 'http://127.0.0.1:7001/public/a0ce40201caca1835fdc86c3fe05a24f.jpg'
     },
 
     // 拖拽

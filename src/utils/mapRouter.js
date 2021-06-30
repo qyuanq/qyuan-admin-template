@@ -14,6 +14,7 @@ const map = {
   'views/shop/trade-stat': () => import('@/views/shop/trade-stat'),
   'views/shop/upload-big-file': () => import('@/views/shop/upload-big-file'),
   '/views/shop/upload-qiniu': () => import('@/views/shop/upload-qiniu'),
+  '/views/shop/download': () => import('@/views/shop/download'),
   'views/nested/menu1/index': () => import('@/views/nested/menu1/index'),
   'views/nested/menu1/menu1-1': () => import('@/views/nested/menu1/menu1-1'),
   'views/nested/menu1/menu1-2': () => import('@/views/nested/menu1/menu1-2'),

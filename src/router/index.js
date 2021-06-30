@@ -118,6 +118,12 @@ export const constantRoutes = [
   //   component: () => import('@/views/shop/upload-qiniu'),
   //   meta: { title: '上传七牛云', icon: 'form' }
   // },
+  // {
+  //   path: 'download',
+  //   name: 'Dowload',
+  //   component: () => import('@/views/shop/download'),
+  //   meta: { title: '下载', icon: 'form' }
+  // },
   //   ]
   // },
 

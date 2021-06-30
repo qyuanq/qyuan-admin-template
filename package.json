@@ -21,6 +21,7 @@
     "file-saver": "^2.0.5",
     "js-cookie": "2.2.0",
     "js-xlsx": "^0.8.22",
+    "jszip": "^3.6.0",
     "lite-virtual-list": "^0.1.7",
     "md5": "^2.3.0",
     "normalize.css": "7.0.0",

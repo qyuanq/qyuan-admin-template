@@ -86,6 +86,12 @@ const constantRoutes = [
         name: 'UploadQiniu',
         component: '/views/shop/upload-qiniu',
         meta: { title: '上传七牛云', icon: 'form' }
+      },
+      {
+        path: 'download',
+        name: 'Dowload',
+        component: '/views/shop/download',
+        meta: { title: '下载', icon: 'form' }
       }
     ]
   },
