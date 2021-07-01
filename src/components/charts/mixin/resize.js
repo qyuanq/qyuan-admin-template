@@ -33,20 +33,20 @@ export default {
         this.$_resizeHandler()
       }
     },
-    //监听resize
+    // 监听resize
     initListener() {
-        //防抖
+      // 防抖
       this.$_resizeHandler = debounce(() => {
         this.resize()
       }, 100)
-      //监听浏览器窗口调整
+      // 监听浏览器窗口调整
       window.addEventListener('resize', this.$_resizeHandler)
-      //侧边栏元素
+      // 侧边栏元素
       this.$_sidebarElm = document.getElementsByClassName('sidebar-container')[0]
-      //css完成transition过度后修改样式及文字：如果宽度变了，改变图表尺寸
+      // css完成transition过度后修改样式及文字：如果宽度变了，改变图表尺寸
       this.$_sidebarElm && this.$_sidebarElm.addEventListener('transitionend', this.$_sidebarResizeHandler)
     },
-    //销毁 取消监听
+    // 销毁 取消监听
     destroyListener() {
       window.removeEventListener('resize', this.$_resizeHandler)
       this.$_resizeHandler = null
@@ -55,7 +55,7 @@ export default {
     },
     resize() {
       const { chart } = this
-      //改变图表尺寸
+      // 改变图表尺寸
       chart && chart.resize()
     }
   }

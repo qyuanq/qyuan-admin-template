@@ -35,13 +35,13 @@ const constantRoutes = [
         path: 'students',
         name: 'Students',
         component: 'views/school/student',
-        meta: { title: '网校学员', icon: 'table' }
+        meta: { title: 'tabs', icon: 'table' }
       },
       {
         path: 'learning',
         name: 'Learning',
         component: 'views/school/learning',
-        meta: { title: '网校学习', icon: 'tree' }
+        meta: { title: 'echarts图表', icon: 'tree' }
       },
       {
         path: 'setting',
