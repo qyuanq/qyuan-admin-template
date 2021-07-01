@@ -1,6 +1,7 @@
 <template>
   <div class="virtual-list">
-    <lite-virtual-list type="fixed" :size="174" :remain="10" :data="goodList" :screen="[2, 2]" :interval="5" :distance="100">
+    <!-- 虚拟列表：scroll节流 interval属性值为毫秒 -->
+    <lite-virtual-list type="fixed" :size="174" :remain="10" :data="goodList" :screen="[2, 2]" :interval="1000" :distance="100">
       <div slot-scope="{ item }">
         <!-- <div>{{ item.id }}</div> -->
         <GoodItem :goods="item" />
