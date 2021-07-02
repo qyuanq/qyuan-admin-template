@@ -6,8 +6,8 @@ import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/element-variables.scss' // 修改主题
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
-import locale from 'element-ui/lib/locale/lang/zh-CN'
-
+// import locale from 'element-ui/lib/locale/lang/zh-CN' // 默认引入中文
+import i18n from './lang' // 国际化几种语言切换
 import '@/styles/index.scss' // global css
 
 import App from './App'
@@ -35,15 +35,20 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
+// Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
+// 如果想要国际版动态切换语言，按如下声明
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
 
 Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
   router,
+  i18n,
   store,
   render: h => h(App)
 })

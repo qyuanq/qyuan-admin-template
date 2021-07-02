@@ -2,7 +2,8 @@
   <div class="container">
     <div class="content-select">
       <div class="btns">
-        <el-button type="primary">去商品库</el-button>
+        <!-- $t多语言 i18n语法  -->
+        <el-button type="primary">{{ $t('good.name') }}</el-button>
         <el-button type="primary">自建商品</el-button>
         <el-button type="primary">导出商品</el-button>
         <el-button type="warning">删除选中商品</el-button>

@@ -6,7 +6,9 @@
     <!-- 动态换肤单一基础色 -->
     <div style="float:left;margin-right:20px">基础色换肤<ThemePicker /></div>
     <!-- 两套主题 多个变量颜色值换肤 -->
-    <div>两套主题<ThemeTwo /> </div>
+    <div style="float:left;margin-right:20px">两套主题<ThemeTwo /> </div>
+    <!-- 切换语言 -->
+    <div class="lang">切换语言<LangSelect /></div>
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
@@ -43,12 +45,16 @@ import Hamburger from '@/components/Hamburger'
 import ThemePicker from '@/components/ThemePicker'
 // 换肤2
 import ThemeTwo from '@/components/ThemePicker/ThemeTwo.vue'
+// 切换语言
+import LangSelect from '@/components/LangSelect'
+
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     ThemePicker,
-    ThemeTwo
+    ThemeTwo,
+    LangSelect
   },
   computed: {
     ...mapGetters([
