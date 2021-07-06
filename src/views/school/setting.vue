@@ -1,17 +1,18 @@
 <template>
   <div>
-      网校设置
+    <ActivityPhoto />
   </div>
 </template>
 
 <script>
+import ActivityPhoto from './components/ActivityPhotos.vue'
 export default {
-  data () {
-    return {
-    };
-  },
 
-  components: {},
+  components: { ActivityPhoto },
+  data() {
+    return {
+    }
+  },
 
   computed: {},
 

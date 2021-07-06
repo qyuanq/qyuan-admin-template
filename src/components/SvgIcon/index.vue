@@ -1,5 +1,7 @@
 <template>
+  <!-- 外链的形式引入 svg -->
   <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners" />
+  <!-- icons/.svg -->
   <svg v-else :class="svgClass" aria-hidden="true" v-on="$listeners">
     <use :xlink:href="iconName" />
   </svg>

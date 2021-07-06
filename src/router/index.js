@@ -78,7 +78,7 @@ export const constantRoutes = [
   //       path: 'setting',
   //       name: 'Setting',
   //       component: () => import('@/views/school/setting'),
-  //       meta: { title: '网校设置', icon: 'tree' }
+  //       meta: { title: '活动图片', icon: 'tree' }
   //     }
   //   ]
   // },

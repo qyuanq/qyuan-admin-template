@@ -8,7 +8,6 @@
 <script>
 import XLSX from 'xlsx'
 import { isExcleOrWord, createFileChunk, calculateHashWork, calculateFileHash } from '@/utils/upload'
-import { aaa } from '@/api/table'
 export default {
   components: {},
   props: {
@@ -84,7 +83,6 @@ export default {
       if (!this.file) {
         return
       }
-      await aaa({ a: '1', b: '2' })
       // 对file做校验
       const isExcel = await isExcleOrWord(this.file)
       if (!isExcel) {
