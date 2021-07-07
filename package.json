@@ -19,6 +19,7 @@
     "core-js": "3.6.5",
     "echarts": "^5.1.2",
     "element-ui": "2.13.2",
+    "fabric": "^4.5.1",
     "file-saver": "^2.0.5",
     "js-cookie": "2.2.0",
     "js-xlsx": "^0.8.22",
