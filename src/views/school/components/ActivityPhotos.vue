@@ -83,6 +83,9 @@ export default {
       hash: '',
       idx: 0,
       canvas: null,
+      bgURL: '',
+      logoURL: '',
+      ewmURL: '',
       dragImg: [
         {
           x: 0, // 初始横坐标
@@ -116,18 +119,11 @@ export default {
         // 背景还是图层
         const canvas = new fabric.Canvas('layer')
         if (e.data.type === 'bg') {
-          // 设置图层背景
-          fabric.Image.fromURL('http://localhost:7001' + res.data.url, function(img) {
-            img.set({
-              // 通过scale来设置图片大小，这里设置和画布一样大
-              scaleX: canvas.width / img.width,
-              scaleY: canvas.height / img.height
-            })
-            // 设置背景
-            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas))
-            canvas.renderAll()
-          })
-          return
+          this.bgURL = res.data.url
+        } else if (e.data.type === 'logo') {
+          this.logoURL = res.data.url
+        } else if (e.data.type === 'ewm') {
+          this.ewmURL = res.data.url
         }
         fabric.Image.fromURL('http://localhost:7001' + res.data.url, (img) => {
           console.log(img)
