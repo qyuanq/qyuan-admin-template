@@ -20,6 +20,18 @@ export function uploadFileExcel(data) {
   })
 }
 
+export function DeleteFileExcel(params) {
+  return request({
+    url: '/api/updateSmailFile',
+    method: 'delete',
+    params
+    // baseURL: 'http://127.0.0.1:7001'
+    // onUploadProgress: progress => {
+    //   this.uploadProgress = Number(((progress.loaded / progress.total) * 100).toFixed(2))
+    // }
+  })
+}
+
 export function checkfile(data) {
   return request({
     url: '/api/checkfile',

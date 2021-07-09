@@ -15,17 +15,7 @@
         <div class="editor">
           <div class="logo">
             <h3>LOGO</h3>
-            <el-upload
-              action=" "
-              :data="{type:'logo'}"
-              list-type="picture-card"
-              :auto-upload="true"
-              :before-upload="beforeUploaded"
-              :http-request="uploaded"
-              :before-remove="removeLogo"
-            >
-              <i slot="default" class="el-icon-plus" />
-            </el-upload>
+            <upload-image :data-obj="logoURL" @changeCanvas="changeLogo" />
           </div>
           <div class="text-style">
             <div class="btns">
@@ -38,31 +28,11 @@
           </div>
           <div class="temp">
             <h3>海报模板</h3>
-            <el-upload
-              action=" "
-              :data="{type:'bg'}"
-              list-type="picture-card"
-              :auto-upload="true"
-              :before-upload="beforeUploaded"
-              :http-request="uploaded"
-              :on-remove="removeBg"
-            >
-              <i slot="default" class="el-icon-plus" />
-            </el-upload>
+            <upload-image :data="{type:'111'}" :data-obj="bgURL" @changeCanvas="changeBg" />
           </div>
           <div class="ewm">
             <h3>个人二维码</h3>
-            <el-upload
-              action=" "
-              :data="{type:'ewm'}"
-              list-type="picture-card"
-              :auto-upload="true"
-              :before-upload="beforeUploaded"
-              :http-request="uploaded"
-              :before-remove="removeEwm"
-            >
-              <i slot="default" class="el-icon-plus" />
-            </el-upload>
+            <upload-image :data-obj="ewmURL" @changeCanvas="changeEwm" />
           </div>
         </div>
       </el-col>
@@ -71,19 +41,17 @@
 </template>
 
 <script>
-import { uploadFileExcel } from '@/api/table'
-import { calculateFileHash } from '@/utils/upload'
 import { fabric } from 'fabric'
 import { saveAs } from 'file-saver'
+import UploadImage from './UploadImage'
 export default {
 
-  components: {},
+  components: { UploadImage },
   data() {
     return {
       checked: true,
       color1: '#FF4640',
       num: 20,
-      hash: '',
       canvas: null,
       selectedObj: null, // 当前选中图层
       FontObj: null, // 字体图层
@@ -91,9 +59,19 @@ export default {
       ewmObj: null, // ewm图层
       isWeight: false,
       fontTop: 0, // 文字距离画布y轴距离
-      bgURL: '', // 背景图片地址
-      logoURL: '', // logo图地址
-      ewmURL: ''// 二维码图地址
+      bgURL: { // 背景图片信息
+        url: '',
+        name: ''
+      },
+      logoURL: { // logo图信息
+        url: '',
+        name: ''
+      },
+      ewmURL: { // 二维码图信息
+        url: '',
+        name: ''
+      },
+      fileList: []
     }
   },
 
@@ -101,60 +79,68 @@ export default {
     this.canvas = new fabric.Canvas('layer', {
       backgroundColor: 'white'
     })
+    // 初始化文字
     this.setText(this.canvas)
     this.addCardEventListener(this.canvas)
   },
 
   methods: {
-    async beforeUploaded(file) {
-      this.hash = await calculateFileHash(file)
-    },
-    async uploaded(e) {
-      console.log(e)
-      const formData = new FormData()
-      formData.append('file', e.file)
-      formData.append('hash', this.hash)
-      const res = await uploadFileExcel(formData)
-      console.log(res)
-      if (res.code === 20000) {
-        // 图片前缀处理跨域 代理
-        const fir = '/dev-api/api/'
-        // 背景还是图层
-        const canvas = this.canvas
-        if (e.data.type === 'bg') {
-          this.bgURL = fir + res.data.url
-          this.setBg(canvas)
-          return
-        } else if (e.data.type === 'logo') {
-          this.logoURL = fir + res.data.url
-          this.setImage(canvas, this.logoURL, 30, 30, 'logo')
-          return
-        } else if (e.data.type === 'ewm') {
-          this.ewmURL = fir + res.data.url
-          this.setImage(canvas, this.ewmURL, 30, 200, 'ewm')
-          return
-        }
+    changeLogo(e) {
+      this.logoURL = e
+      // 删除图片 图片对象为空 删除图层
+      if (this.logoURL.url === '') {
+        this.removeLogo()
+        return
       }
+      // 图层对象存在 先删除图层再创建
+      if (this.LogoObj) {
+        this.removeLogo()
+      }
+      this.setImage(this.logoURL.url, 30, 30, 'logo')
     },
+    changeBg(e) {
+      this.bgURL = e
+      if (this.bgURL.url === '') {
+        this.removeBg()
+        return
+      }
+      this.removeBg()
+      this.setBg()
+    },
+    changeEwm(e) {
+      this.ewmURL = e
+      // 删除图片 图片对象为空 删除图层
+      if (this.ewmURL.url === '') {
+        this.removeEwm()
+        return
+      }
+      // 图层对象存在 先删除图层再创建
+      if (this.LogoObj) {
+        this.removeEwm()
+      }
+      this.setImage(this.ewmURL.url, 30, 300, 'ewm')
+    },
+
     // 设置图片图层
-    setImage(canvas, url, x, y, type) {
+    setImage(url, x, y, type) {
       fabric.Image.fromURL(url, (img) => {
         // 添加对象后, 如下图
         img.set({
           left: x,
           top: y
         })
-        canvas.add(img).setActiveObject(img)
+        this.canvas.add(img).setActiveObject(img)
         if (type === 'logo') {
-          this.LogoObj = canvas.getActiveObject()
+          this.LogoObj = this.canvas.getActiveObject()
           return
         }
-        this.ewmObj = canvas.getActiveObject()
+        this.ewmObj = this.canvas.getActiveObject()
       })
     },
     // 设置背景
-    setBg(canvas) {
-      fabric.Image.fromURL(this.bgURL, function(img) {
+    setBg() {
+      const canvas = this.canvas
+      fabric.Image.fromURL(this.bgURL.url, function(img) {
         img.set({
           // 通过scale来设置图片大小，这里设置和画布一样大
           scaleX: canvas.width / img.width,
@@ -181,22 +167,19 @@ export default {
       canvas.add(textbox).setActiveObject(textbox)
       this.FontObj = canvas.getActiveObject()
     },
+
     // 文字是否显示
     setShow() {
+      // 文字隐藏
       if (!this.checked && this.FontObj) {
-        // this.canvas.remove(this.selectedObj) // 传入需要移除的object
-        this.fontTop = this.FontObj.top
-        this.FontObj.set({
-          top: -500
-        })
-        this.canvas.renderAll()
+        this.FontObj.set('opacity', 0)
+        this.canvas.discardActiveObject() // 取消选中
+        this.canvas.renderAll() // 渲染画布
         return
       }
-      this.FontObj.set({
-        top: this.fontTop
-      })
+      // 文字显示
+      this.FontObj.set('opacity', 1)
       this.canvas.renderAll()
-      // this.setText(this.canvas)
     },
     // 文字颜色改变
     setColor() {
@@ -226,6 +209,7 @@ export default {
       })
       this.canvas.renderAll()
     },
+
     // 监听canvas事件
     addCardEventListener(card) {
       card.on('object:added', (e) => { // 添加图层
@@ -258,6 +242,7 @@ export default {
         this.selectedObj = null
       })
     },
+
     // 移除logo图层
     removeLogo() {
       if (!this.LogoObj) {
@@ -265,6 +250,7 @@ export default {
       }
       this.canvas.remove(this.LogoObj)
       this.canvas.renderAll()
+      this.LogoObj = null
     },
     // 移除canvas背景
     removeBg() {
@@ -278,7 +264,9 @@ export default {
       }
       this.canvas.remove(this.ewmObj)
       this.canvas.renderAll()
+      this.ewmObj = null
     },
+
     // 下载海报
     downloadBill() {
       const dataURL = this.canvas.toDataURL({

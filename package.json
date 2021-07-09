@@ -25,6 +25,7 @@
     "js-xlsx": "^0.8.22",
     "jszip": "^3.6.0",
     "lite-virtual-list": "^0.1.7",
+    "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
